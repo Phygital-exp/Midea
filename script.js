@@ -27,7 +27,7 @@ async function search() {
             if (searchType === 'pdv') {
                 return item.PDV.toLowerCase().includes(searchInput) || item.SAP.toString().includes(searchInput);
             } else {
-                return item.PRODUCTO.toLowerCase().includes(searchInput) || item.SAP.toString().includes(searchInput);
+                return item.NOM_PRODUCTOS.toLowerCase().includes(searchInput) || item.SAP.toString().includes(searchInput);
             }
         });
 
@@ -73,6 +73,6 @@ function renderResults(results, searchType) {
 
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text)
-        .then(() => alert('¡Copiado al portapapeles!'))
+        .then(() => alert('Copiado al portapapeles!'))
         .catch(err => console.error('Error al copiar:', err));
 }
