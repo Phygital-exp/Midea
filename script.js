@@ -40,7 +40,7 @@ function updatePlaceholder() {
 function initializeFuse(type) {
     const options = {
         keys: type === 'pdv'    
-            ? ['SAP', 'REGION', 'CIUDAD', 'CANAL', 'CADENA']
+            ? ['SAP', 'REGION', 'CIUDAD', 'CANAL', 'CADENA', 'PDV']
             : ['SAP', 'SUBCATEGORIA', 'REFERENCIA', 'NOM_PRODUCTOS'],
         threshold: 0.3,
     };
