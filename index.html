@@ -3,40 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rutero Midea</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Vincula el archivo CSS -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!-- Agrega Material Icons -->
-    <link rel="icon" href="https://s3.amazonaws.com/botgen/Uploads/midea_1736260299.png" type="image/png"> <!-- Favicon -->
-</head>
+    <title>Buscador Midea</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" href="https://s3.amazonaws.com/botgen/Uploads/midea_1736260299.png" type="image/png">
+</head> 
 <body>
-    <!-- Contenedor principal de búsqueda -->
     <div class="search-container">
-        <h1 id="searchTitle">Búsqueda</h1>
-        <select id="searchType" onchange="updateSearch()">
+        <h1 id="searchTitle">Búsqueda datos Midea</h1>
+        
+        <select id="searchType" onchange="updatePlaceholder()">
             <option value="pdv">Buscar PDV</option>
-            <option value="producto">Buscar producto</option>
+            <option value="producto">Buscar Producto</option>
         </select>
-        <input type="text" id="searchInput" placeholder="Escribe la palabra clave...">
-        <div class="button-container">
-            <button onclick="search()">Buscar</button>
-        </div>
+
+        <input type="text" id="searchInput" placeholder="Ingresa el nombre PDV" oninput="handleInput()">
+
         <div id="results"></div>
     </div>
 
-    <!-- Footer con logos y contacto 
-    <footer>
-        <div class="footer-content">
-            <div class="logo-container">
-                <img src="https://s3.amazonaws.com/botgen/Uploads/ppt_nueva_phygital-27_1720634176.png" alt="Logo PPT">
-            </div>
-            <div class="contact-info">
-                <p><b>Soporte: </b>Santiago Abadia</p>
-                <p><i class="material-icons">phone</i> +57 323 4576531</p>
-            </div>
-        </div>
-    </footer>
-    -->
-
     <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
 </body>
 </html>
