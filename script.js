@@ -3,6 +3,7 @@ let fuse = null;
 let allData = { pdv: [], producto: [] };
 let fullData = [];
 
+
 const PDV_URL = 'https://botai.smartdataautomation.com/api_backend_ai/dinamic-db/report/119/MideaPDVs';
 const PRODUCTO_URL = 'https://botai.smartdataautomation.com/api_backend_ai/dinamic-db/report/119/MideaPortafolioProducts';
 const AUTH_HEADERS = {
@@ -39,7 +40,7 @@ function updatePlaceholder() {
 
 function initializeFuse(type) {
     const options = {
-        keys: type === 'pdv'    
+        keys: type === 'pdv'
             ? ['SAP', 'REGION', 'CIUDAD', 'CADENA', 'PDV']
             : ['SAP', 'SUBCATEGORIA', 'REFERENCIA', 'NOM_PRODUCTOS'],
         threshold: 0.3,
@@ -54,7 +55,7 @@ function handleInput() {
         if (searchInput.trim()) {
             performSearch(searchInput);
         } else {
-            document.getElementById('results').innerHTML = ''; 
+            document.getElementById('results').innerHTML = '';
         }
     }, 300);
 }
@@ -65,22 +66,31 @@ function performSearch(query) {
 }
 
 function renderResults(results) {
+    const type = document.getElementById('searchType').value;
     let output = `<h2>Resultados (${results.length} encontrados):</h2>`;
 
     if (results.length > 0) {
         results.forEach(result => {
+            const nombre = result.PDV || result.NOM_PRODUCTOS;
+            const claseTipo = result.PDV ? 'pdv' : 'producto';
+
             output += `
-                <div class="result-item">
-                    <h3>${result.PDV || result.NOM_PRODUCTOS}</h3>
+                <div class="result-item ${claseTipo}" role="region" aria-label="${nombre}">
+                    <h3>
+                        <i class="material-icons icon-tipo">${result.PDV ? 'store' : 'inventory_2'}</i>
+                        ${nombre}
+                    </h3>
+                    <div class="tags">
+                        ${result.CIUDAD ? `<span class="tag ciudad">${result.CIUDAD}</span>` : ''}
+                        ${result.CADENA ? `<span class="tag cadena">${result.CADENA}</span>` : ''}
+                        ${result.REGION ? `<span class="tag region">${result.REGION}</span>` : ''}
+                        ${result.SUBCATEGORIA ? `<span class="tag subcategoria">${result.SUBCATEGORIA}</span>` : ''}
+                    </div>
                     <ul>
-                        <li><strong>SAP:</strong> ${result.SAP} 
-                            <i class="material-icons copy-icon" onclick="copyToClipboard('${result.SAP}')">content_copy</i>
+                        <li><strong>SAP:</strong> ${result.SAP}
+                            <i class="material-icons copy-icon" role="button" tabindex="0" aria-label="Copiar SAP" onclick="copyToClipboard('${result.SAP}')">content_copy</i>
                         </li>
-                        ${result.REGION ? `<li><strong>Región:</strong> ${result.REGION}</li>` : ''}
-                        ${result.CIUDAD ? `<li><strong>Ciudad:</strong> ${result.CIUDAD}</li>` : ''}
                         ${result.CANAL ? `<li><strong>Canal:</strong> ${result.CANAL}</li>` : ''}
-                        ${result.CADENA ? `<li><strong>Cadena:</strong> ${result.CADENA}</li>` : ''}
-                        ${result.SUBCATEGORIA ? `<li><strong>Subcategoría:</strong> ${result.SUBCATEGORIA}</li>` : ''}
                         ${result.REFERENCIA ? `<li><strong>Referencia:</strong> ${result.REFERENCIA}</li>` : ''}
                     </ul>
                 </div>
@@ -104,6 +114,20 @@ function copyToClipboard(text) {
         });
 }
 
-loadData().then(() => {
-    updatePlaceholder();
-});
+function toggleDarkMode() {
+    const isDark = document.getElementById('darkModeToggle').checked;
+    document.body.classList.toggle('dark-mode', isDark);
+    document.getElementById('darkModeLabel').textContent = isDark ? '☀️ Modo claro' : '🌙 Modo oscuro';
+    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+}
+
+window.onload = () => {
+    const darkModeSetting = localStorage.getItem('darkMode');
+    const isDark = darkModeSetting === 'enabled';
+    document.body.classList.toggle('dark-mode', isDark);
+    document.getElementById('darkModeToggle').checked = isDark;
+    document.getElementById('darkModeLabel').textContent = isDark ? '☀️ Modo claro' : '🌙 Modo oscuro';
+    document.getElementById('searchInput').focus();
+};
+
+loadData().then(() => updatePlaceholder());
