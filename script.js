@@ -3,23 +3,34 @@ let fuse = null;
 let allData = { pdv: [], producto: [] };
 let fullData = [];
 
-
-const PDV_URL = 'https://botai.smartdataautomation.com/api_backend_ai/dinamic-db/report/119/MideaPDVs';
-const PRODUCTO_URL = 'https://botai.smartdataautomation.com/api_backend_ai/dinamic-db/report/119/MideaPortafolioProducts';
+const proxy = 'https://corsproxy.io/?';
+const PDV_URL = proxy + encodeURIComponent('https://botai.smartdataautomation.com/api_backend_ai/dinamic-db/report/119/MideaPDVs');
+const PRODUCTO_URL = proxy + encodeURIComponent('https://botai.smartdataautomation.com/api_backend_ai/dinamic-db/report/119/MideaPortafolioProducts');
 const AUTH_HEADERS = {
     'Authorization': 'Token 4e15396f99ae10dd5c195d81fb6a3722c0a44a10',
     'Content-Type': 'application/json'
 };
 
 async function loadData() {
-    if (!allData.pdv.length) {
-        const pdvResponse = await fetch(PDV_URL, { headers: AUTH_HEADERS });
-        allData.pdv = (await pdvResponse.json()).result || [];
-    }
+    try {
+        if (!allData.pdv.length) {
+            const pdvResponse = await fetch(PDV_URL, { headers: AUTH_HEADERS });
+            const json = await pdvResponse.json();
+            allData.pdv = json.result || [];
+        }
 
-    if (!allData.producto.length) {
-        const productoResponse = await fetch(PRODUCTO_URL, { headers: AUTH_HEADERS });
-        allData.producto = (await productoResponse.json()).result || [];
+        if (!allData.producto.length) {
+            const productoResponse = await fetch(PRODUCTO_URL, { headers: AUTH_HEADERS });
+            const json = await productoResponse.json();
+            allData.producto = json.result || [];
+        }
+
+        updatePlaceholder();
+    } catch (error) {
+        console.error("Error al cargar datos:", error);
+        document.getElementById('results').innerHTML = `
+            <p style="color:red;">❌ No se pudo cargar la información. 
+            Es posible que los permisos de CORS lo estén bloqueando.</p>`;
     }
 }
 
@@ -34,7 +45,7 @@ function updatePlaceholder() {
     searchInput.value = '';
     document.getElementById('results').innerHTML = '';
 
-    fullData = allData[searchType];
+    fullData = allData[searchType] || [];
     initializeFuse(searchType);
 }
 
@@ -61,6 +72,7 @@ function handleInput() {
 }
 
 function performSearch(query) {
+    if (!fuse) return;
     const results = fuse.search(query).map(result => result.item);
     renderResults(results);
 }
@@ -106,10 +118,10 @@ function renderResults(results) {
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text)
         .then(() => {
-            alert('SAP copiado al portapapeles');
+            alert('✅ SAP copiado al portapapeles');
         })
         .catch(err => {
-            alert('Error al copiar el SAP');
+            alert('⚠️ Error al copiar el SAP');
             console.error('Error:', err);
         });
 }
@@ -130,6 +142,4 @@ window.onload = () => {
     document.getElementById('searchInput').focus();
 };
 
-loadData().then(() => updatePlaceholder());
-
-// Forzar deploy limpio 
+loadData();
