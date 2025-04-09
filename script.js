@@ -3,19 +3,20 @@ let fuse = null;
 let allData = { pdv: [], producto: [] };
 let fullData = [];
 
+// URLs a tu backend proxy en Railway
 const PDV_URL = 'https://backendmidea-production.up.railway.app/api/pdv';
 const PRODUCTO_URL = 'https://backendmidea-production.up.railway.app/api/producto';
 
 async function loadData() {
     try {
         if (!allData.pdv.length) {
-            const pdvResponse = await fetch(PDV_URL, { headers: AUTH_HEADERS });
+            const pdvResponse = await fetch(PDV_URL);
             const json = await pdvResponse.json();
             allData.pdv = json.result || [];
         }
 
         if (!allData.producto.length) {
-            const productoResponse = await fetch(PRODUCTO_URL, { headers: AUTH_HEADERS });
+            const productoResponse = await fetch(PRODUCTO_URL);
             const json = await productoResponse.json();
             allData.producto = json.result || [];
         }
@@ -25,7 +26,7 @@ async function loadData() {
         console.error("Error al cargar datos:", error);
         document.getElementById('results').innerHTML = `
             <p style="color:red;">❌ No se pudo cargar la información. 
-            Es posible que los permisos de CORS lo estén bloqueando.</p>`;
+            Es posible que los permisos de CORS o el servidor estén bloqueando la conexión.</p>`;
     }
 }
 
