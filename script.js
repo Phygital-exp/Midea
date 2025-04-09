@@ -131,3 +131,5 @@ window.onload = () => {
 };
 
 loadData().then(() => updatePlaceholder());
+
+// Forzar deploy limpio 
