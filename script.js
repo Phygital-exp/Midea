@@ -3,13 +3,8 @@ let fuse = null;
 let allData = { pdv: [], producto: [] };
 let fullData = [];
 
-const proxy = 'https://corsproxy.io/?';
-const PDV_URL = proxy + encodeURIComponent('https://botai.smartdataautomation.com/api_backend_ai/dinamic-db/report/119/MideaPDVs');
-const PRODUCTO_URL = proxy + encodeURIComponent('https://botai.smartdataautomation.com/api_backend_ai/dinamic-db/report/119/MideaPortafolioProducts');
-const AUTH_HEADERS = {
-    'Authorization': 'Token 4e15396f99ae10dd5c195d81fb6a3722c0a44a10',
-    'Content-Type': 'application/json'
-};
+const PDV_URL = 'https://backendmidea-production.up.railway.app/api/pdv';
+const PRODUCTO_URL = 'https://backendmidea-production.up.railway.app/api/producto';
 
 async function loadData() {
     try {
