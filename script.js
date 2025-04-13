@@ -3,7 +3,6 @@ let fuse = null;
 let allData = { pdv: [], producto: [] };
 let fullData = [];
 
-// URLs a tu backend proxy en Railway
 const PDV_URL = 'https://backendmidea-production.up.railway.app/api/pdv';
 const PRODUCTO_URL = 'https://backendmidea-production.up.railway.app/api/producto';
 
@@ -25,7 +24,7 @@ async function loadData() {
     } catch (error) {
         console.error("Error al cargar datos:", error);
         document.getElementById('results').innerHTML = `
-            <p style="color:red;">❌ No se pudo cargar la información. 
+            <p style="color:red;"> No se pudo cargar la información. 
             Es posible que los permisos de CORS o el servidor estén bloqueando la conexión.</p>`;
     }
 }
@@ -114,10 +113,10 @@ function renderResults(results) {
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text)
         .then(() => {
-            alert('✅ SAP copiado al portapapeles');
+            alert('SAP copiado al portapapeles');
         })
         .catch(err => {
-            alert('⚠️ Error al copiar el SAP');
+            alert('Error al copiar el SAP');
             console.error('Error:', err);
         });
 }
